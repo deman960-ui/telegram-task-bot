@@ -69,12 +69,15 @@ async def message_handler(message: Message):
         )
 
         answer = response.choices[0].message.content
-        print("✅ OpenAI ответил", flush=True)
-        print(f"🤖 Ответ GPT: {answer!r}", flush=True)
+print("✅ OpenAI ответил", flush=True)
+print(f"🤖 Ответ GPT: {answer!r}", flush=True)
+print("📤 Отправляю ответ в Telegram...", flush=True)
 
-        await message.answer(
-            f"📋 Задача:\n{answer}"
-        )
+await message.answer(
+    f"📋 Задача:\n{answer}"
+)
+
+print("✅ Ответ отправлен в Telegram", flush=True)
 
     except Exception as e:
         print(f"❌ OpenAI error: {type(e).__name__}: {e}", flush=True)
