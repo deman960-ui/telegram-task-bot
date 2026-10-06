@@ -69,11 +69,11 @@ async def message_handler(message: Message):
         )
 
         answer = response.choices[0].message.content
-print("✅ OpenAI ответил", flush=True)
-print(f"🤖 Ответ GPT: {answer!r}", flush=True)
-print("📤 Отправляю ответ в Telegram...", flush=True)
+        print("✅ OpenAI ответил", flush=True)
+        print(f"🤖 Ответ GPT: {answer!r}", flush=True)
+        print("📤 Отправляю ответ в Telegram...", flush=True)
 
-await message.answer(
+        await message.answer(
     f"📋 Задача:\n{answer}"
 )
 
