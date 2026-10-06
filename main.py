@@ -42,14 +42,19 @@ async def message_handler(message: Message):
     clean_text = text.replace(f"@{bot_username}", "").strip()
 
     if not clean_text:
-        await message.answer("Напиши после моего упоминания текст задачи.")
+        await message.answer(
+            "Напиши после моего упоминания текст задачи."
+        )
         return
 
     await message.answer("🧠 Анализирую задачу...")
+
     print(f"📩 Получена задача: {clean_text}", flush=True)
 
+    # ---------- OPENAI ----------
     try:
         print("🔄 Отправляю запрос в OpenAI...", flush=True)
+
         response = await openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -68,27 +73,44 @@ async def message_handler(message: Message):
             ],
         )
 
-        answer = response.choices[0].message.content
         print("✅ OpenAI ответил", flush=True)
+
+        answer = response.choices[0].message.content
+
         print(f"🤖 Ответ GPT: {answer!r}", flush=True)
-        print("📤 Отправляю ответ в Telegram...", flush=True)
-
-        await message.answer(
-    f"📋 Задача:\n{answer}"
-)
-
-print("✅ Ответ отправлен в Telegram", flush=True)
 
     except Exception as e:
-        print(f"❌ OpenAI error: {type(e).__name__}: {e}", flush=True)
+        print(
+            f"❌ Ошибка OpenAI: {type(e).__name__}: {e}",
+            flush=True,
+        )
+
         await message.answer(
             "❌ Не удалось обратиться к OpenAI. "
             "Проверь настройки API."
         )
+        return
+
+    # ---------- TELEGRAM ----------
+    try:
+        print("📤 Отправляю ответ в Telegram...", flush=True)
+
+        await message.answer(
+            f"📋 Задача:\n{answer or 'GPT вернул пустой ответ.'}"
+        )
+
+        print("✅ Ответ отправлен в Telegram", flush=True)
+
+    except Exception as e:
+        print(
+            f"❌ Ошибка отправки в Telegram: "
+            f"{type(e).__name__}: {e}",
+            flush=True,
+        )
 
 
 async def main():
-    print("🤖 Бот запускается...")
+    print("🤖 Бот запускается...", flush=True)
     await dp.start_polling(bot)
 
 
