@@ -46,8 +46,10 @@ async def message_handler(message: Message):
         return
 
     await message.answer("🧠 Анализирую задачу...")
+    print(f"📩 Получена задача: {clean_text}", flush=True)
 
     try:
+        print("🔄 Отправляю запрос в OpenAI...", flush=True)
         response = await openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -67,13 +69,14 @@ async def message_handler(message: Message):
         )
 
         answer = response.choices[0].message.content
+        print("✅ OpenAI ответил", flush=True)
 
         await message.answer(
             f"📋 Задача:\n{answer}"
         )
 
     except Exception as e:
-        print(f"OpenAI error: {e}")
+        print(f"❌ OpenAI error: {type(e).__name__}: {e}", flush=True)
         await message.answer(
             "❌ Не удалось обратиться к OpenAI. "
             "Проверь настройки API."
