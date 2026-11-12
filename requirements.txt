@@ -1,2 +1,4 @@
 aiogram==3.22.0
 openai==1.109.1
+aiosqlite==0.21.0
+tzdata>=2024.1

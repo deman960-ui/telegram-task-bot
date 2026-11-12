@@ -1,0 +1,13 @@
+# данные и секреты не должны попадать ни в образ, ни в репозиторий
+data/
+*.db
+*.db-wal
+*.db-shm
+.env
+.git/
+.gitignore
+__pycache__/
+*.pyc
+.venv/
+venv/
+README.md
